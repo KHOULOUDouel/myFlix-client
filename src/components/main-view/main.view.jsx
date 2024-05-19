@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MovieCard } from '../movie-card/movie-card';
-
+import { MovieView } from '../movie-view/movie-view';
 export const MainView = () => {
   const [movies, setMovies] = useState([
     {
@@ -35,6 +35,16 @@ export const MainView = () => {
       }
   ]);
 
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
+  const onMovieClick = (movie) => {
+    setSelectedMovie(movie);
+  };
+
+  if (selectedMovie) {
+    return <MovieView movie={selectedMovie} />;
+  }
+
   if (movies.length === 0) {
     return <div>The list is empty!</div>;
   }
@@ -42,7 +52,7 @@ export const MainView = () => {
   return (
     <div>
       {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
+        <MovieCard key={movie.id} movie={movie} onMovieClick={onMovieClick} />
       ))}
     </div>
   );
