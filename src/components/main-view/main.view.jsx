@@ -53,7 +53,11 @@ export const MainView = () => {
   return (
     <div>
       {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} onMovieClick={onMovieClick} />
+        <MovieCard 
+          key={movie.id} 
+          movie={movie} 
+          onMovieClick={onMovieClick} 
+        />
       ))}
     </div>
   );
