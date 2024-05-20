@@ -2,7 +2,8 @@
 import { createRoot } from 'react-dom/client';
 
 // Import the MainView component from the specified path
-import { MainView } from "./components/main-view/main-view";
+import { MainView } from './components/main-view/main-view.jsx';
+
 
 // Import statement to include the styles from `./index.scss`
 import "./index.scss";
