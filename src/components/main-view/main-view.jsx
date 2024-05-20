@@ -47,22 +47,25 @@ export const MainView = () => {
   };
 
   if (selectedMovie) {
-    return <MovieView movie={selectedMovie} />;
+    return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
   }
-
-  if (movies.length === 0) {
-    return <div>The list is empty!</div>;
-  }
-
+  
   return (
     <div>
-      {movies.map((movie) => (
-        <MovieCard 
-          key={movie.id} 
-          movie={movie} 
-          onMovieClick={onMovieClick} 
-        />
-      ))}
+      {movies.length === 0 ? (
+        <div>The list is empty!</div>
+      ) : (
+        movies.map((movie) => (
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            onMovieClick={(newSelectedMovie) => {
+              setSelectedMovie(newSelectedMovie);
+            }}
+          />
+        ))
+      )}
     </div>
   );
 };
+  
