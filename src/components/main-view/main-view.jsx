@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
+
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
@@ -55,4 +57,18 @@ export const MainView = () => {
       </div>
     </div>
   );
+};
+
+// Define PropTypes for MainView
+MainView.propTypes = {
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      director: PropTypes.string
+    })
+  ).isRequired,
+  selectedMovie: PropTypes.object,
+  setSelectedMovie: PropTypes.func
 };
