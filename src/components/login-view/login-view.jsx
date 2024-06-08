@@ -1,17 +1,61 @@
 // src/components/login-view/login-view.jsx
 
-import React from 'react';
+import React, { useState } from 'react';
 
-export const LoginView = () => {
+export const LoginView = ({ onLoggedIn }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Client-side validation
+    if (username.length < 3) {
+      setError('Username must be at least 3 characters long.');
+      return;
+    }
+
+    // Perform authentication (mock example)
+    fetch('https://your-api-url.com/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          onLoggedIn(data.user);
+        } else {
+          setError('Invalid username or password.');
+        }
+      })
+      .catch(() => {
+        setError('Something went wrong. Please try again.');
+      });
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <label>
         Username:
-        <input type="text" />
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          minLength="3"
+        />
       </label>
       <label>
         Password:
-        <input type="password" />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
       </label>
       <button type="submit">Submit</button>
     </form>
