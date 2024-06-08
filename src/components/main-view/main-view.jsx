@@ -8,17 +8,17 @@ import { LoginView } from '../login-view/login-view'; // Import the LoginView co
 export const MainView = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [user, setUser] = useState(null); // Added missing user state
+  const [user, setUser] = useState(null); // Added user state
 
   useEffect(() => {
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.map((movie) => { // Removed .docs since it's not part of the API response
+        const moviesFromApi = data.map((movie) => {
           return {
             id: movie.id,
             title: movie.title,
-            poster: movie.poster, // Assuming your API provides a poster URL
+            poster: movie.poster,
             director: movie.director,
           };
         });
@@ -35,18 +35,22 @@ export const MainView = () => {
     setSelectedMovie(null);
   };
 
+  const handleLogout = () => {
+    setUser(null);
+  };
+
   if (!user) {
-    return <LoginView />; // Render the LoginView component if no user is logged in
+    return <LoginView onLoggedIn={setUser} />; // Pass setUser to LoginView
   }
 
   if (selectedMovie) {
     return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
   }
-  
+
   return (
     <div>
       <h1>Movie List</h1>
-      <button onClick={() => { setUser(null); }}>Logout</button> {/* Logout Button */}
+      <button onClick={handleLogout}>Logout</button> {/* Logout Button */}
       <div>
         {movies.length === 0 ? (
           <div>The list is empty!</div>
@@ -75,7 +79,7 @@ MainView.propTypes = {
       poster: PropTypes.string.isRequired,
       director: PropTypes.string
     })
-  ).isRequired,
+  ),
   selectedMovie: PropTypes.object,
   setSelectedMovie: PropTypes.func,
 };
