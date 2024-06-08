@@ -24,10 +24,12 @@ export const LoginView = ({ onLoggedIn }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
-          onLoggedIn(data.user);
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("token", data.token);
+          onLoggedIn(data.user, data.token);
         } else {
-          setError('Invalid username or password.');
+          alert("No such user");
         }
       })
       .catch(() => {
