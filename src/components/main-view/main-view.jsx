@@ -9,15 +9,15 @@ export const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    fetch("https://openlibrary.org/search.json?q=star+wars")
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.docs.map((doc) => {
+        const moviesFromApi = data.docs.map((movie) => {
           return {
-            id: doc.key,
-            title: doc.title,
-            image: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
-            director: doc.author_name?.[0]
+            id: movie.id,
+            title: movie.title,
+            poster: movie.poster, // Assuming your API provides a poster URL
+            director: movie.director,
           };
         });
 
