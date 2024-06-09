@@ -1,42 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
+
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
 export const MainView = () => {
-  const [movies, setMovies] = useState([
-    {
-      id: 1,
-      title: "Inception",
-      image: "https://image-url-1.com",
-      director: "Christopher Nolan"
-    },
-    {
-      id: 2,
-      title: "The Matrix",
-      image: "https://image-url-2.com",
-      director: "The Wachowskis"
-    },
-    {
-      id: 3,
-      title: "Interstellar",
-      image: "https://image-url-3.com",
-      director: "Christopher Nolan"
-    },
-    {
-      id: 4,
-      title: "The Dark Knight",
-      image: "https://image-url-4.com",
-      director: "Christopher Nolan"
-    },
-    {
-      id: 5,
-      title: "Fight Club",
-      image: "https://image-url-5.com",
-      director: "David Fincher"
-    }
-  ]);
-
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
+
+  useEffect(() => {
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.docs.map((movie) => {
+          return {
+            id: movie.id,
+            title: movie.title,
+            poster: movie.poster, // Assuming your API provides a poster URL
+            director: movie.director,
+          };
+        });
+
+        setMovies(moviesFromApi);
+      });
+  }, []);
 
   const onMovieClick = (movie) => {
     setSelectedMovie(movie);
@@ -52,20 +39,36 @@ export const MainView = () => {
   
   return (
     <div>
-      {movies.length === 0 ? (
-        <div>The list is empty!</div>
-      ) : (
-        movies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onMovieClick={(newSelectedMovie) => {
-              setSelectedMovie(newSelectedMovie);
-            }}
-          />
-        ))
-      )}
+      <h1>Movie List</h1>
+      <div>
+        {movies.length === 0 ? (
+          <div>The list is empty!</div>
+        ) : (
+          movies.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              onMovieClick={(newSelectedMovie) => {
+                setSelectedMovie(newSelectedMovie);
+              }}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 };
-  
+
+// Define PropTypes for MainView
+MainView.propTypes = {
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      director: PropTypes.string
+    })
+  ).isRequired,
+  selectedMovie: PropTypes.object,
+  setSelectedMovie: PropTypes.func
+};
