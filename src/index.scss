@@ -1,7 +1,39 @@
-$color: steelblue;
+// Customize Bootstrap variables
+$primary: SeaGreen;
+$body-bg: Honeydew;
 
-.my-flix {
-  color: $color;
+// Import Bootstrap SCSS
+@import '~bootstrap/scss/bootstrap.scss';
+
+// Custom styles
+body {
+  font-family: 'Arial, sans-serif';
+  background-color: $body-bg;
+  color: #343a40;
 }
 
-@import '~bootstrap/scss/bootstrap';
+h1 {
+  color: $primary;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.form-control {
+  border-radius: 0.25rem;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+
+  &:hover {
+    background-color: darken($primary, 10%);
+    border-color: darken($primary, 10%);
+  }
+}
