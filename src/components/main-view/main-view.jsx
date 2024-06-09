@@ -1,7 +1,7 @@
 // src/components/main-view/main-view.jsx
 
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import { MovieCard } from '../movie-card/movie-card';
@@ -10,18 +10,18 @@ import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const storedToken = localStorage.getItem('token');
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [user, setUser] = useState(storedUser ? storedUser : null); // Updated to use stored user
+  const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
 
   useEffect(() => {
     if (!token) return;
 
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies", {
-      headers: { Authorization: `Bearer ${token}` },
+    fetch('https://khouloud-movies-c211078f4ca4.herokuapp.com/movies', {
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then((response) => response.json())
       .then((data) => {
@@ -46,21 +46,23 @@ export const MainView = () => {
   if (!user) {
     return (
       <Container>
-        <Row>
-          <Col>
-            <LoginView onLoggedIn={(user, token) => {
-              setUser(user);
-              setToken(token);
-            }} />
+        <Row className="justify-content-md-center">
+          <Col md={6}>
+            <LoginView
+              onLoggedIn={(user, token) => {
+                setUser(user);
+                setToken(token);
+              }}
+            />
           </Col>
         </Row>
-        <Row>
-          <Col>
+        <Row className="justify-content-md-center mt-3">
+          <Col md={6} className="text-center">
             or
           </Col>
         </Row>
-        <Row>
-          <Col>
+        <Row className="justify-content-md-center mt-3">
+          <Col md={6}>
             <SignupView />
           </Col>
         </Row>
@@ -85,7 +87,9 @@ export const MainView = () => {
       <Row className="mb-3">
         <Col>
           <h1>Movie List</h1>
-          <Button onClick={handleLogout}>Logout</Button>
+          <Button variant="secondary" onClick={handleLogout}>
+            Logout
+          </Button>
         </Col>
       </Row>
       <Row>
@@ -121,5 +125,5 @@ MainView.propTypes = {
     })
   ),
   selectedMovie: PropTypes.object,
-  setSelectedMovie: PropTypes.func,
+  setSelectedMovie: PropTypes.func
 };
