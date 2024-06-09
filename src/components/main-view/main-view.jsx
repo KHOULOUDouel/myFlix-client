@@ -4,14 +4,17 @@ import PropTypes from 'prop-types';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
-import { SignupView } from '../signup-view/signup-view'; // Import the SignupView component
+import { SignupView } from '../signup-view/signup-view';
 
 export const MainView = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
+
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
     if (!token) return;
@@ -46,16 +49,34 @@ export const MainView = () => {
     localStorage.clear();
   };
 
+  const handleLogin = (user, token) => {
+    setUser(user);
+    setToken(token);
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
+  };
+
+  const handleSignup = () => {
+    setShowLogin(true);
+  };
+
   if (!user) {
     return (
-      <>
-        <LoginView onLoggedIn={(user, token) => {
-          setUser(user);
-          setToken(token);
-        }} />
-        or
-        <SignupView />
-      </>
+      <div>
+        {showLogin ? (
+          <>
+            <LoginView onLoggedIn={handleLogin} />
+            <p>or</p>
+            <button onClick={() => setShowLogin(false)}>Sign up</button>
+          </>
+        ) : (
+          <>
+            <SignupView onSignedUp={handleSignup} />
+            <p>or</p>
+            <button onClick={() => setShowLogin(true)}>Log in</button>
+          </>
+        )}
+      </div>
     );
   }
 
@@ -66,8 +87,7 @@ export const MainView = () => {
   return (
     <div>
       <h1>Movie List</h1>
-      <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
-
+      <button onClick={handleLogout}>Logout</button>
       <div>
         {movies.length === 0 ? (
           <div>The list is empty!</div>
@@ -91,7 +111,7 @@ MainView.propTypes = {
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       poster: PropTypes.string.isRequired,
-      director: PropTypes.string
+      director: PropTypes.string,
     })
   ),
   selectedMovie: PropTypes.object,
