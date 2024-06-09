@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-export const SignupView = () => {
+export const SignupView = ({ onSignedUp }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -13,7 +15,7 @@ export const SignupView = () => {
       Username: username,
       Password: password,
       Email: email,
-      Birthday: birthday
+      Birthday: birthday,
     };
 
     fetch("https://your-api-url.com/signup", {
@@ -25,15 +27,20 @@ export const SignupView = () => {
     }).then((response) => {
       if (response.ok) {
         alert("Signup successful");
-        window.location.reload();
+        onSignedUp();
       } else {
-        alert("Signup failed");
+        response.json().then((error) => {
+          setError(error.message);
+        });
       }
+    }).catch((e) => {
+      setError('Something went wrong. Please try again.');
     });
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <label>
         Username:
         <input
@@ -74,4 +81,8 @@ export const SignupView = () => {
       <button type="submit">Submit</button>
     </form>
   );
+};
+
+SignupView.propTypes = {
+  onSignedUp: PropTypes.func.isRequired,
 };
