@@ -1,8 +1,8 @@
 // src/components/main-view/main-view.jsx
 
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import './main-view.scss';
 
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
@@ -25,7 +25,13 @@ export const MainView = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setMovies(data);
+        const moviesFromApi = data.map((movie) => ({
+          id: movie._id,
+          title: movie.Title,
+          poster: movie.ImagePath,
+          director: movie.Director.Name
+        }));
+        setMovies(moviesFromApi);
       });
   }, [token]);
 
@@ -48,20 +54,13 @@ export const MainView = () => {
       <Container>
         <Row className="justify-content-md-center">
           <Col md={6}>
-            <LoginView
-              onLoggedIn={(user, token) => {
-                setUser(user);
-                setToken(token);
-              }}
-            />
+            <LoginView onLoggedIn={(user, token) => {
+              setUser(user);
+              setToken(token);
+            }} />
           </Col>
         </Row>
-        <Row className="justify-content-md-center mt-3">
-          <Col md={6} className="text-center">
-            or
-          </Col>
-        </Row>
-        <Row className="justify-content-md-center mt-3">
+        <Row className="justify-content-md-center">
           <Col md={6}>
             <SignupView />
           </Col>
@@ -70,60 +69,20 @@ export const MainView = () => {
     );
   }
 
-  if (selectedMovie) {
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <MovieView movie={selectedMovie} onBackClick={onBackClick} />
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
   return (
     <Container>
-      <Row className="mb-3">
-        <Col>
-          <h1>Movie List</h1>
-          <Button variant="secondary" onClick={handleLogout}>
-            Logout
-          </Button>
+      <Row className="justify-content-md-center">
+        <Col md={6}>
+          <Button variant="danger" onClick={handleLogout}>Logout</Button>
         </Col>
       </Row>
-      <Row>
-        {movies.length === 0 ? (
-          <Col>
-            <div>The list is empty!</div>
+      <Row className="movie-list">
+        {movies.map((movie) => (
+          <Col md={4} key={movie.id}>
+            <MovieCard movie={movie} onMovieClick={onMovieClick} />
           </Col>
-        ) : (
-          movies.map((movie) => (
-            <Col key={movie.id} xs={12} sm={6} md={4} lg={3} className="mb-3">
-              <MovieCard
-                movie={movie}
-                onMovieClick={(newSelectedMovie) => {
-                  setSelectedMovie(newSelectedMovie);
-                }}
-              />
-            </Col>
-          ))
-        )}
+        ))}
       </Row>
     </Container>
   );
-};
-
-// Define PropTypes for MainView
-MainView.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      poster: PropTypes.string.isRequired,
-      director: PropTypes.string
-    })
-  ),
-  selectedMovie: PropTypes.object,
-  setSelectedMovie: PropTypes.func
 };

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import './signup-view.scss';
 
 export const SignupView = () => {
   const [username, setUsername] = useState('');
@@ -36,7 +37,7 @@ export const SignupView = () => {
   };
 
   return (
-    <Container>
+    <Container className="signup-view">
       <Row className="justify-content-md-center">
         <Col md={6}>
           <Form onSubmit={handleSubmit}>
@@ -80,7 +81,7 @@ export const SignupView = () => {
                 required
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" className="w-100">
               Submit
             </Button>
           </Form>

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import './login-view.scss';
 
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState('');
@@ -12,13 +13,11 @@ export const LoginView = ({ onLoggedIn }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Client-side validation
     if (username.length < 3) {
       setError('Username must be at least 3 characters long.');
       return;
     }
 
-    // Perform authentication (mock example)
     fetch('https://your-api-url.com/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -34,17 +33,17 @@ export const LoginView = ({ onLoggedIn }) => {
           setError('Invalid username or password.');
         }
       })
-      .catch((e) => {
+      .catch(() => {
         setError('Something went wrong. Please try again.');
       });
   };
 
   return (
-    <Container>
+    <Container className="login-view">
       <Row className="justify-content-md-center">
         <Col md={6}>
           <Form onSubmit={handleSubmit}>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="text-danger">{error}</p>}
             <Form.Group controlId="formUsername">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -66,7 +65,7 @@ export const LoginView = ({ onLoggedIn }) => {
                 placeholder="Enter password"
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" className="w-100">
               Submit
             </Button>
           </Form>
