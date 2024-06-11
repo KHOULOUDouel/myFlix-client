@@ -1,25 +1,18 @@
- React-Bootstrap
-// src/components/main-view/main-view.jsx
+ // src/components/main-view/main-view.jsx
 
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import './main-view.scss';
 
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes
- main
-
 import { MovieCard } from '../movie-card/movie-card';
-import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 
 export const MainView = () => {
- React-Bootstrap
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const storedToken = localStorage.getItem('token');
 
- main
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
@@ -43,23 +36,6 @@ export const MainView = () => {
       });
   }, [token]);
 
-  useEffect(() => {
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
-      .then((response) => response.json())
-      .then((data) => {
-        const moviesFromApi = data.docs.map((movie) => {
-          return {
-            id: movie.id,
-            title: movie.title,
-            poster: movie.poster, // Assuming your API provides a poster URL
-            director: movie.director,
-          };
-        });
-
-        setMovies(moviesFromApi);
-      });
-  }, []);
-
   const onMovieClick = (movie) => {
     setSelectedMovie(movie);
   };
@@ -79,10 +55,12 @@ export const MainView = () => {
       <Container>
         <Row className="justify-content-md-center">
           <Col md={6}>
-            <LoginView onLoggedIn={(user, token) => {
-              setUser(user);
-              setToken(token);
-            }} />
+            <LoginView
+              onLoggedIn={(user, token) => {
+                setUser(user);
+                setToken(token);
+              }}
+            />
           </Col>
         </Row>
         <Row className="justify-content-md-center">
@@ -95,7 +73,6 @@ export const MainView = () => {
   }
 
   return (
- React-Bootstrap
     <Container>
       <Row className="justify-content-md-center">
         <Col md={6}>
@@ -109,28 +86,10 @@ export const MainView = () => {
           </Col>
         ))}
       </Row>
+      {selectedMovie && (
+        <MovieView movie={selectedMovie} onBackClick={onBackClick} />
+      )}
     </Container>
-  );
-};
-
-    <div>
-      <h1>Movie List</h1>
-      <div>
-        {movies.length === 0 ? (
-          <div>The list is empty!</div>
-        ) : (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
-              onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
-              }}
-            />
-          ))
-        )}
-      </div>
-    </div>
   );
 };
 
@@ -140,11 +99,10 @@ MainView.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
+      poster: PropTypes.string.isRequired,
       director: PropTypes.string
     })
   ).isRequired,
   selectedMovie: PropTypes.object,
   setSelectedMovie: PropTypes.func
 };
- main
