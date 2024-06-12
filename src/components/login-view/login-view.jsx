@@ -1,5 +1,3 @@
-// src/components/login-view/login-view.jsx
-
 import React, { useState } from 'react';
 
 export const LoginView = ({ onLoggedIn }) => {
@@ -17,13 +15,14 @@ export const LoginView = ({ onLoggedIn }) => {
     }
 
     // Perform authentication (mock example)
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies", {
+    fetch("http://localhost:8080/login", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ Username: username, Password: password })
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);

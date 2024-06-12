@@ -19,23 +19,32 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies", {
+    fetch("http://localhost:8080/movies/", {
       headers: { Authorization: `Bearer ${token}` },
     })
-    .then((response) => response.json())
-    .then((data) => {
-      const moviesFromApi = data.map((movie) => ({
-        id: movie.id,
-        title: movie.title,
-        poster: movie.poster,
-        director: movie.director,
-      }));
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.map((movie) => ({
+          id: movie._id,
+          title: movie.Title,
+          description: movie.Description,
+          genre: {
+            name: movie.Genre.Name,
+            Description: movie.Genre.Description
+          },
+          director: {
+            name: movie.Director.Name,
+            Bio: movie.Director.Bio,
+            Birth: movie.Director.Birth
+          },
+          imagePath: movie.ImagePath
+        }));
 
-      setMovies(moviesFromApi);
-    })
-    .catch((error) => {
-      console.error("Error fetching movies:", error);
-    });
+        setMovies(moviesFromApi);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
+      });
   }, [token]);
 
   const onMovieClick = (movie) => {
@@ -106,17 +115,4 @@ export const MainView = () => {
       </div>
     </div>
   );
-};
-
-MainView.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      poster: PropTypes.string.isRequired,
-      director: PropTypes.string,
-    })
-  ),
-  selectedMovie: PropTypes.object,
-  setSelectedMovie: PropTypes.func,
 };
