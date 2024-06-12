@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+ Task-5
 import PropTypes from 'prop-types';
+
+import PropTypes from 'prop-types'; // Import PropTypes
+ main
 
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
@@ -7,9 +11,12 @@ import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 
 export const MainView = () => {
+ Task-5
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
+
+ main
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
@@ -46,6 +53,23 @@ export const MainView = () => {
         console.error("Error fetching movies:", error);
       });
   }, [token]);
+
+  useEffect(() => {
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.docs.map((movie) => {
+          return {
+            id: movie.id,
+            title: movie.title,
+            poster: movie.poster, // Assuming your API provides a poster URL
+            director: movie.director,
+          };
+        });
+
+        setMovies(moviesFromApi);
+      });
+  }, []);
 
   const onMovieClick = (movie) => {
     setSelectedMovie(movie);
@@ -99,7 +123,10 @@ export const MainView = () => {
   return (
     <div>
       <h1>Movie List</h1>
+ Task-5
       <button onClick={handleLogout}>Logout</button>
+
+ main
       <div>
         {movies.length === 0 ? (
           <div>The list is empty!</div>
@@ -108,11 +135,35 @@ export const MainView = () => {
             <MovieCard
               key={movie.id}
               movie={movie}
+ Task-5
               onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
+
+              onMovieClick={(newSelectedMovie) => {
+                setSelectedMovie(newSelectedMovie);
+              }}
+ main
             />
           ))
         )}
       </div>
     </div>
   );
+ Task-5
 };
+
+};
+
+// Define PropTypes for MainView
+MainView.propTypes = {
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      director: PropTypes.string
+    })
+  ).isRequired,
+  selectedMovie: PropTypes.object,
+  setSelectedMovie: PropTypes.func
+};
+ main
