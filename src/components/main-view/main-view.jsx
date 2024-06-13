@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
- Task-5
 import PropTypes from 'prop-types';
-
-import PropTypes from 'prop-types'; // Import PropTypes
- main
-
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 
 export const MainView = () => {
- Task-5
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
-
- main
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
@@ -96,61 +90,50 @@ export const MainView = () => {
     setShowLogin(true);
   };
 
-  if (!user) {
-    return (
-      <div>
-        {showLogin ? (
-          <>
-            <LoginView onLoggedIn={handleLogin} />
-            <p>or</p>
-            <button onClick={() => setShowLogin(false)}>Sign up</button>
-          </>
-        ) : (
-          <>
-            <SignupView onSignedUp={handleSignup} />
-            <p>or</p>
-            <button onClick={() => setShowLogin(true)}>Log in</button>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  if (selectedMovie) {
-    return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
-  }
-
   return (
-    <div>
-      <h1>Movie List</h1>
- Task-5
-      <button onClick={handleLogout}>Logout</button>
-
- main
-      <div>
-        {movies.length === 0 ? (
+    <Row className="justify-content-md-center">
+      {!user ? (
+        <Col md={6}>
+          {showLogin ? (
+            <>
+              <LoginView onLoggedIn={handleLogin} />
+              <p>or</p>
+              <button onClick={() => setShowLogin(false)}>Sign up</button>
+            </>
+          ) : (
+            <>
+              <SignupView onSignedUp={handleSignup} />
+              <p>or</p>
+              <button onClick={() => setShowLogin(true)}>Log in</button>
+            </>
+          )}
+        </Col>
+      ) : selectedMovie ? (
+        <Col md={8}>
+          <MovieView movie={selectedMovie} onBackClick={onBackClick} />
+        </Col>
+      ) : movies.length === 0 ? (
+        <Col md={8}>
           <div>The list is empty!</div>
-        ) : (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
- Task-5
-              onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
-
-              onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
-              }}
- main
-            />
-          ))
-        )}
-      </div>
-    </div>
+        </Col>
+      ) : (
+        <Col md={10}>
+          <h1>Movie List</h1>
+          <button onClick={handleLogout}>Logout</button>
+          <Row>
+            {movies.map((movie) => (
+              <Col md={4} key={movie.id}>
+                <MovieCard
+                  movie={movie}
+                  onMovieClick={onMovieClick}
+                />
+              </Col>
+            ))}
+          </Row>
+        </Col>
+      )}
+    </Row>
   );
- Task-5
-};
-
 };
 
 // Define PropTypes for MainView
@@ -159,11 +142,19 @@ MainView.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      director: PropTypes.string
+      imagePath: PropTypes.string.isRequired,
+      director: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        Bio: PropTypes.string,
+        Birth: PropTypes.string,
+      }).isRequired,
+      genre: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        Description: PropTypes.string,
+      }).isRequired,
+      description: PropTypes.string.isRequired,
     })
-  ).isRequired,
+  ),
   selectedMovie: PropTypes.object,
-  setSelectedMovie: PropTypes.func
+  setSelectedMovie: PropTypes.func,
 };
- main
