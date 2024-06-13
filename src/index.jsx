@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container';
 
 // Import statement to include the styles from `./index.scss`
 import "./index.scss";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '~bootstrap/scss/bootstrap.scss';
 
 // Define the main App component, which will eventually include all other components
 const App = () => {
