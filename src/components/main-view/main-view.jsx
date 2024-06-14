@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react';
- Task-5
 import PropTypes from 'prop-types';
-
-import PropTypes from 'prop-types'; // Import PropTypes
- main
-
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 
+// MainView component
 export const MainView = () => {
- Task-5
+  // Retrieve stored user and token from localStorage
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
-
- main
+  // State hooks
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
 
+  // Fetch movies from API when token is available
   useEffect(() => {
     if (!token) return;
 
@@ -37,12 +33,12 @@ export const MainView = () => {
           description: movie.Description,
           genre: {
             name: movie.Genre.Name,
-            Description: movie.Genre.Description
+            description: movie.Genre.Description
           },
           director: {
             name: movie.Director.Name,
-            Bio: movie.Director.Bio,
-            Birth: movie.Director.Birth
+            bio: movie.Director.Bio,
+            birth: movie.Director.Birth
           },
           imagePath: movie.ImagePath
         }));
@@ -54,37 +50,40 @@ export const MainView = () => {
       });
   }, [token]);
 
+  // Fetch movies from API without token (public access)
   useEffect(() => {
     fetch("http://localhost:8080/movies/")
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.docs.map((movie) => {
-          return {
-            id: movie.id,
-            title: movie.title,
-            poster: movie.poster, // Assuming your API provides a poster URL
-            director: movie.director,
-          };
-        });
+        const moviesFromApi = data.docs.map((movie) => ({
+          id: movie.id,
+          title: movie.title,
+          poster: movie.poster,
+          director: movie.director,
+        }));
 
         setMovies(moviesFromApi);
       });
   }, []);
 
+  // Handle movie click
   const onMovieClick = (movie) => {
     setSelectedMovie(movie);
   };
 
+  // Handle back button click in MovieView
   const onBackClick = () => {
     setSelectedMovie(null);
   };
 
+  // Handle logout
   const handleLogout = () => {
     setUser(null);
     setToken(null);
     localStorage.clear();
   };
 
+  // Handle login
   const handleLogin = (user, token) => {
     setUser(user);
     setToken(token);
@@ -92,10 +91,12 @@ export const MainView = () => {
     localStorage.setItem("token", token);
   };
 
+  // Handle signup
   const handleSignup = () => {
     setShowLogin(true);
   };
 
+  // Render login/signup view if user is not logged in
   if (!user) {
     return (
       <div>
@@ -116,17 +117,16 @@ export const MainView = () => {
     );
   }
 
+  // Render MovieView if a movie is selected
   if (selectedMovie) {
     return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
   }
 
+  // Render movie list
   return (
     <div>
       <h1>Movie List</h1>
- Task-5
       <button onClick={handleLogout}>Logout</button>
-
- main
       <div>
         {movies.length === 0 ? (
           <div>The list is empty!</div>
@@ -135,22 +135,13 @@ export const MainView = () => {
             <MovieCard
               key={movie.id}
               movie={movie}
- Task-5
               onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
-
-              onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
-              }}
- main
             />
           ))
         )}
       </div>
     </div>
   );
- Task-5
-};
-
 };
 
 // Define PropTypes for MainView
@@ -166,4 +157,3 @@ MainView.propTypes = {
   selectedMovie: PropTypes.object,
   setSelectedMovie: PropTypes.func
 };
- main
