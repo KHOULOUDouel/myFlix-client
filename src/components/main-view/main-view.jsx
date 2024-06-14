@@ -55,7 +55,7 @@ export const MainView = () => {
   }, [token]);
 
   useEffect(() => {
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
+    fetch("http://localhost:8080/movies/")
       .then((response) => response.json())
       .then((data) => {
         const moviesFromApi = data.docs.map((movie) => {
