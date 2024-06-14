@@ -18,7 +18,7 @@ export const SignupView = ({ onSignedUp }) => {
       Birthday: birthday,
     };
 
-    fetch("http://localhost:8080/movies/", {
+    fetch("http://localhost:8080/users", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
