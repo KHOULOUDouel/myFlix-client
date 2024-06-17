@@ -27,20 +27,23 @@ export const MainView = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("movies: ", data);
         const moviesFromApi = data.map((movie) => ({
-          id: movie._id,
+          id: movie._id.$oid,
           title: movie.Title,
           description: movie.Description,
           genre: {
             name: movie.Genre.Name,
-            Description: movie.Genre.Description
+            description: movie.Genre.Description
           },
           director: {
             name: movie.Director.Name,
-            Bio: movie.Director.Bio,
-            Birth: movie.Director.Birth
+            bio: movie.Director.Bio,
+            birth: movie.Director.Birth,
+            death: movie.Director.Death,
           },
-          imagePath: movie.ImagePath
+          imagePath: movie.ImagePath,
+          featured: movie.Featured,
         }));
 
         setMovies(moviesFromApi);
@@ -136,14 +139,16 @@ MainView.propTypes = {
       imagePath: PropTypes.string.isRequired,
       director: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        Bio: PropTypes.string,
-        Birth: PropTypes.string,
+        bio: PropTypes.string,
+        birth: PropTypes.string,
+        death: PropTypes.string,
       }).isRequired,
       genre: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        Description: PropTypes.string,
+        description: PropTypes.string,
       }).isRequired,
       description: PropTypes.string.isRequired,
+      featured: PropTypes.bool,
     })
   ),
   selectedMovie: PropTypes.object,
