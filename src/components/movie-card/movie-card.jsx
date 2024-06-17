@@ -9,7 +9,11 @@ export const MovieCard = ({ movie, onMovieClick }) => {
       <Card.Img variant="top" src={movie.imagePath} alt={movie.title} />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
-        <Card.Text>{movie.director.name}</Card.Text>
+        <Card.Text>
+          <strong>Director:</strong> {movie.director.name}
+          <br />
+          <strong>Genre:</strong> {movie.genre.name}
+        </Card.Text>
         <Button variant="link" onClick={() => onMovieClick(movie)}>
           Open
         </Button>
@@ -28,11 +32,13 @@ MovieCard.propTypes = {
       name: PropTypes.string.isRequired,
       bio: PropTypes.string,
       birth: PropTypes.string,
+      death: PropTypes.string,
     }).isRequired,
     genre: PropTypes.shape({
       name: PropTypes.string.isRequired,
       description: PropTypes.string,
     }).isRequired,
+    featured: PropTypes.bool,
   }).isRequired,
   onMovieClick: PropTypes.func.isRequired,
 };
