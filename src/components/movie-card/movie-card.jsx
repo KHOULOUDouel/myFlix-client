@@ -6,10 +6,10 @@ import Button from 'react-bootstrap/Button';
 export const MovieCard = ({ movie, onMovieClick }) => {
   return (
     <Card onClick={() => onMovieClick(movie)} style={{ cursor: 'pointer' }}>
-      <Card.Img variant="top" src={movie.image} alt={movie.title} />
+      <Card.Img variant="top" src={movie.imagePath} alt={movie.title} />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
-        <Card.Text>{movie.director}</Card.Text>
+        <Card.Text>{movie.director.name}</Card.Text>
         <Button variant="link" onClick={() => onMovieClick(movie)}>
           Open
         </Button>
@@ -22,8 +22,17 @@ MovieCard.propTypes = {
   movie: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    director: PropTypes.string,
+    imagePath: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    director: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      bio: PropTypes.string,
+      birth: PropTypes.string,
+    }).isRequired,
+    genre: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string,
+    }).isRequired,
   }).isRequired,
   onMovieClick: PropTypes.func.isRequired,
 };
