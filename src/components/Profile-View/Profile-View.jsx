@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button, Form, Container, Row, Col } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
@@ -89,7 +89,7 @@ export const ProfileView = ({ user, movies, onUserUpdate, onDeregister }) => {
           <Row>
             {favoriteMovies.map((movie) => (
               <Col md={4} key={movie._id}>
-                <MovieCard movie={movie} />
+                <MovieCard movie={movie} user={user} onFavorite={() => {}} />
               </Col>
             ))}
           </Row>
@@ -109,18 +109,18 @@ ProfileView.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      Title: PropTypes.string.isRequired,
-      ImagePath: PropTypes.string.isRequired,
-      Description: PropTypes.string.isRequired,
-      Director: PropTypes.shape({
-        Name: PropTypes.string.isRequired,
-        Bio: PropTypes.string,
-        Birth: PropTypes.string,
-        Death: PropTypes.string,
+      title: PropTypes.string.isRequired,
+      imagePath: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      director: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        bio: PropTypes.string,
+        birth: PropTypes.string,
+        death: PropTypes.string,
       }).isRequired,
-      Genre: PropTypes.shape({
-        Name: PropTypes.string.isRequired,
-        Description: PropTypes.string,
+      genre: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string,
       }).isRequired,
     })
   ).isRequired,
