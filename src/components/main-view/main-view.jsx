@@ -4,6 +4,7 @@ import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
+import { ProfileView } from '../profile-view/profile-view';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -12,8 +13,8 @@ import Button from 'react-bootstrap/Button';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const storedToken = localStorage.getItem('token');
 
   const [movies, setMovies] = useState([]);
   const [user, setUser] = useState(storedUser ? storedUser : null);
@@ -23,7 +24,7 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:8080/movies/", {
+    fetch('http://localhost:8080/movies/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -34,20 +35,20 @@ export const MainView = () => {
           description: movie.Description,
           genre: {
             name: movie.Genre.Name,
-            description: movie.Genre.Description
+            description: movie.Genre.Description,
           },
           director: {
             name: movie.Director.Name,
             bio: movie.Director.Bio,
-            birth: movie.Director.Birth
+            birth: movie.Director.Birth,
           },
-          imagePath: movie.ImagePath
+          imagePath: movie.ImagePath,
         }));
 
         setMovies(moviesFromApi);
       })
       .catch((error) => {
-        console.error("Error fetching movies:", error);
+        console.error('Error fetching movies:', error);
       });
   }, [token]);
 
@@ -60,12 +61,46 @@ export const MainView = () => {
   const handleLogin = (user, token) => {
     setUser(user);
     setToken(token);
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("token", token);
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
   };
 
   const handleSignup = () => {
     setShowLogin(true);
+  };
+
+  const handleUserUpdate = (updatedUser) => {
+    fetch(`http://localhost:8080/users/${user.Username}`, {
+      method: 'PUT',
+      body: JSON.stringify(updatedUser),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data);
+        localStorage.setItem('user', JSON.stringify(data));
+      })
+      .catch((error) => {
+        console.error('Error updating user:', error);
+      });
+  };
+
+  const handleDeregister = (username) => {
+    fetch(`http://localhost:8080/users/${username}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(() => {
+        handleLogout();
+      })
+      .catch((error) => {
+        console.error('Error deregistering user:', error);
+      });
   };
 
   return (
@@ -79,7 +114,6 @@ export const MainView = () => {
               user ? (
                 <>
                   <h1>Movie List</h1>
-                  <Button onClick={handleLogout}>Logout</Button>
                   <Row>
                     {movies.length === 0 ? (
                       <Col>
@@ -118,8 +152,17 @@ export const MainView = () => {
           <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
           <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
           <Route path="/movies/:movieId" element={<MovieView movies={movies} />} />
-          {/* Placeholder for Profile view */}
-          <Route path="/profile" element={<div>Profile View (to be implemented)</div>} />
+          <Route
+            path="/profile"
+            element={
+              <ProfileView
+                user={user}
+                movies={movies}
+                onUserUpdate={handleUserUpdate}
+                onDeregister={handleDeregister}
+              />
+            }
+          />
         </Routes>
       </Router>
     </Container>
