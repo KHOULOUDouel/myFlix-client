@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './movie-view.scss';
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, user, onFavorite }) => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
 
@@ -18,6 +18,8 @@ export const MovieView = ({ movies }) => {
   }, [movies, movieId]);
 
   if (!movie) return <div>Loading...</div>;
+
+  const isFavorite = user && user.FavoriteMovies.includes(movie._id);
 
   return (
     <Container className="movie-view mt-4">
@@ -47,6 +49,14 @@ export const MovieView = ({ movies }) => {
               <Button variant="primary" as={Link} to="/">
                 Back
               </Button>
+              {user && (
+                <Button
+                  variant={isFavorite ? "danger" : "success"}
+                  onClick={() => onFavorite(movie._id)}
+                >
+                  {isFavorite ? "Unfavorite" : "Favorite"}
+                </Button>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -75,4 +85,8 @@ MovieView.propTypes = {
       featured: PropTypes.bool,
     })
   ).isRequired,
+  user: PropTypes.shape({
+    FavoriteMovies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }),
+  onFavorite: PropTypes.func.isRequired,
 };
