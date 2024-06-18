@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './movie-view.scss';
 
-export const MovieView = ({ movies, onBackClick }) => {
+export const MovieView = ({ movies }) => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
 
@@ -44,7 +44,7 @@ export const MovieView = ({ movies, onBackClick }) => {
                 <br />
                 {movie.director.death && <small>Death: {movie.director.death}</small>}
               </Card.Text>
-              <Button variant="primary" as={Link} to="/" onClick={onBackClick}>
+              <Button variant="primary" as={Link} to="/">
                 Back
               </Button>
             </Card.Body>
@@ -75,5 +75,4 @@ MovieView.propTypes = {
       featured: PropTypes.bool,
     })
   ).isRequired,
-  onBackClick: PropTypes.func.isRequired,
 };
