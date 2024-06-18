@@ -103,6 +103,25 @@ export const MainView = () => {
       });
   };
 
+  const handleFavorite = (movieId) => {
+    const isFavorite = user.FavoriteMovies.includes(movieId);
+    const url = `http://localhost:8080/users/${user.Username}/movies/${movieId}`;
+    const method = isFavorite ? 'DELETE' : 'POST';
+
+    fetch(url, {
+      method,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data);
+        localStorage.setItem('user', JSON.stringify(data));
+      })
+      .catch((error) => {
+        console.error('Error updating favorites:', error);
+      });
+  };
+
   return (
     <Container>
       <Router>
@@ -122,7 +141,11 @@ export const MainView = () => {
                     ) : (
                       movies.map((movie) => (
                         <Col md={4} key={movie._id}>
-                          <MovieCard movie={movie} />
+                          <MovieCard
+                            movie={movie}
+                            user={user}
+                            onFavorite={handleFavorite}
+                          />
                         </Col>
                       ))
                     )}
@@ -151,7 +174,16 @@ export const MainView = () => {
           />
           <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
           <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
-          <Route path="/movies/:movieId" element={<MovieView movies={movies} />} />
+          <Route
+            path="/movies/:movieId"
+            element={
+              <MovieView
+                movies={movies}
+                user={user}
+                onFavorite={handleFavorite}
+              />
+            }
+          />
           <Route
             path="/profile"
             element={
