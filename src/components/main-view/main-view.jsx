@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
- Task-5
 import PropTypes from 'prop-types';
-
-import PropTypes from 'prop-types'; // Import PropTypes
- main
-
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 export const MainView = () => {
- Task-5
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
-
- main
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
@@ -31,20 +27,23 @@ export const MainView = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("movies: ", data);
         const moviesFromApi = data.map((movie) => ({
-          id: movie._id,
+          id: movie._id.$oid,
           title: movie.Title,
           description: movie.Description,
           genre: {
             name: movie.Genre.Name,
-            Description: movie.Genre.Description
+            description: movie.Genre.Description
           },
           director: {
             name: movie.Director.Name,
-            Bio: movie.Director.Bio,
-            Birth: movie.Director.Birth
+            bio: movie.Director.Bio,
+            birth: movie.Director.Birth,
+            death: movie.Director.Death,
           },
-          imagePath: movie.ImagePath
+          imagePath: movie.ImagePath,
+          featured: movie.Featured,
         }));
 
         setMovies(moviesFromApi);
@@ -53,23 +52,6 @@ export const MainView = () => {
         console.error("Error fetching movies:", error);
       });
   }, [token]);
-
-  useEffect(() => {
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies")
-      .then((response) => response.json())
-      .then((data) => {
-        const moviesFromApi = data.docs.map((movie) => {
-          return {
-            id: movie.id,
-            title: movie.title,
-            poster: movie.poster, // Assuming your API provides a poster URL
-            director: movie.director,
-          };
-        });
-
-        setMovies(moviesFromApi);
-      });
-  }, []);
 
   const onMovieClick = (movie) => {
     setSelectedMovie(movie);
@@ -98,21 +80,25 @@ export const MainView = () => {
 
   if (!user) {
     return (
-      <div>
-        {showLogin ? (
-          <>
-            <LoginView onLoggedIn={handleLogin} />
-            <p>or</p>
-            <button onClick={() => setShowLogin(false)}>Sign up</button>
-          </>
-        ) : (
-          <>
-            <SignupView onSignedUp={handleSignup} />
-            <p>or</p>
-            <button onClick={() => setShowLogin(true)}>Log in</button>
-          </>
-        )}
-      </div>
+      <Container>
+        <Row className="justify-content-md-center">
+          <Col md={6}>
+            {showLogin ? (
+              <>
+                <LoginView onLoggedIn={handleLogin} />
+                <p>or</p>
+                <Button onClick={() => setShowLogin(false)}>Sign up</Button>
+              </>
+            ) : (
+              <>
+                <SignupView onSignedUp={handleSignup} />
+                <p>or</p>
+                <Button onClick={() => setShowLogin(true)}>Log in</Button>
+              </>
+            )}
+          </Col>
+        </Row>
+      </Container>
     );
   }
 
@@ -121,36 +107,27 @@ export const MainView = () => {
   }
 
   return (
-    <div>
+    <Container>
       <h1>Movie List</h1>
- Task-5
-      <button onClick={handleLogout}>Logout</button>
-
- main
-      <div>
+      <Button onClick={handleLogout}>Logout</Button>
+      <Row>
         {movies.length === 0 ? (
-          <div>The list is empty!</div>
+          <Col>
+            <div>The list is empty!</div>
+          </Col>
         ) : (
           movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
- Task-5
-              onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
-
-              onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
-              }}
- main
-            />
+            <Col md={4} key={movie.id}>
+              <MovieCard
+                movie={movie}
+                onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
+              />
+            </Col>
           ))
         )}
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
- Task-5
-};
-
 };
 
 // Define PropTypes for MainView
@@ -159,11 +136,21 @@ MainView.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      director: PropTypes.string
+      imagePath: PropTypes.string.isRequired,
+      director: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        bio: PropTypes.string,
+        birth: PropTypes.string,
+        death: PropTypes.string,
+      }).isRequired,
+      genre: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string,
+      }).isRequired,
+      description: PropTypes.string.isRequired,
+      featured: PropTypes.bool,
     })
-  ).isRequired,
+  ),
   selectedMovie: PropTypes.object,
-  setSelectedMovie: PropTypes.func
+  setSelectedMovie: PropTypes.func,
 };
- main
