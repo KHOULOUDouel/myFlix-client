@@ -8,13 +8,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
@@ -27,9 +27,8 @@ export const MainView = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("movies: ", data);
         const moviesFromApi = data.map((movie) => ({
-          id: movie._id.$oid,
+          _id: movie._id,
           title: movie.Title,
           description: movie.Description,
           genre: {
@@ -39,11 +38,9 @@ export const MainView = () => {
           director: {
             name: movie.Director.Name,
             bio: movie.Director.Bio,
-            birth: movie.Director.Birth,
-            death: movie.Director.Death,
+            birth: movie.Director.Birth
           },
-          imagePath: movie.ImagePath,
-          featured: movie.Featured,
+          imagePath: movie.ImagePath
         }));
 
         setMovies(moviesFromApi);
@@ -52,14 +49,6 @@ export const MainView = () => {
         console.error("Error fetching movies:", error);
       });
   }, [token]);
-
-  const onMovieClick = (movie) => {
-    setSelectedMovie(movie);
-  };
-
-  const onBackClick = () => {
-    setSelectedMovie(null);
-  };
 
   const handleLogout = () => {
     setUser(null);
@@ -78,79 +67,77 @@ export const MainView = () => {
     setShowLogin(true);
   };
 
-  if (!user) {
-    return (
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col md={6}>
-            {showLogin ? (
-              <>
-                <LoginView onLoggedIn={handleLogin} />
-                <p>or</p>
-                <Button onClick={() => setShowLogin(false)}>Sign up</Button>
-              </>
-            ) : (
-              <>
-                <SignupView onSignedUp={handleSignup} />
-                <p>or</p>
-                <Button onClick={() => setShowLogin(true)}>Log in</Button>
-              </>
-            )}
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
-  if (selectedMovie) {
-    return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
-  }
-
   return (
     <Container>
-      <h1>Movie List</h1>
-      <Button onClick={handleLogout}>Logout</Button>
-      <Row>
-        {movies.length === 0 ? (
-          <Col>
-            <div>The list is empty!</div>
-          </Col>
-        ) : (
-          movies.map((movie) => (
-            <Col md={4} key={movie.id}>
-              <MovieCard
-                movie={movie}
-                onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
-              />
-            </Col>
-          ))
-        )}
-      </Row>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user ? (
+                <>
+                  <h1>Movie List</h1>
+                  <Button onClick={handleLogout}>Logout</Button>
+                  <Row>
+                    {movies.length === 0 ? (
+                      <Col>
+                        <div>The list is empty!</div>
+                      </Col>
+                    ) : (
+                      movies.map((movie) => (
+                        <Col md={4} key={movie._id}>
+                          <MovieCard movie={movie} />
+                        </Col>
+                      ))
+                    )}
+                  </Row>
+                </>
+              ) : (
+                <Row className="justify-content-md-center">
+                  <Col md={6}>
+                    {showLogin ? (
+                      <>
+                        <LoginView onLoggedIn={handleLogin} />
+                        <p>or</p>
+                        <Button onClick={() => setShowLogin(false)}>Sign up</Button>
+                      </>
+                    ) : (
+                      <>
+                        <SignupView onSignedUp={handleSignup} />
+                        <p>or</p>
+                        <Button onClick={() => setShowLogin(true)}>Log in</Button>
+                      </>
+                    )}
+                  </Col>
+                </Row>
+              )
+            }
+          />
+          <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
+          <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
+          <Route path="/movies/:movieId" element={<MovieView movies={movies} />} />
+        </Routes>
+      </Router>
     </Container>
   );
 };
 
-// Define PropTypes for MainView
 MainView.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      _id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       imagePath: PropTypes.string.isRequired,
       director: PropTypes.shape({
         name: PropTypes.string.isRequired,
         bio: PropTypes.string,
         birth: PropTypes.string,
-        death: PropTypes.string,
       }).isRequired,
       genre: PropTypes.shape({
         name: PropTypes.string.isRequired,
         description: PropTypes.string,
       }).isRequired,
       description: PropTypes.string.isRequired,
-      featured: PropTypes.bool,
     })
   ),
-  selectedMovie: PropTypes.object,
-  setSelectedMovie: PropTypes.func,
 };
