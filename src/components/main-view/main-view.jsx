@@ -4,6 +4,7 @@ import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
+import { NavigationBar } from '../navigation-bar/navigation-bar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -70,6 +71,7 @@ export const MainView = () => {
   return (
     <Container>
       <Router>
+        <NavigationBar user={user} onLoggedOut={handleLogout} />
         <Routes>
           <Route
             path="/"
@@ -116,6 +118,8 @@ export const MainView = () => {
           <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
           <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
           <Route path="/movies/:movieId" element={<MovieView movies={movies} />} />
+          {/* Placeholder for Profile view */}
+          <Route path="/profile" element={<div>Profile View (to be implemented)</div>} />
         </Routes>
       </Router>
     </Container>
