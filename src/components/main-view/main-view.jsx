@@ -10,7 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -127,7 +127,7 @@ export const MainView = () => {
       <NavigationBar user={user} onLoggedOut={handleLogout} />
       <Routes>
         <Route
-          path="/"
+          path='/'
           element={
             user ? (
               <>
@@ -151,13 +151,15 @@ export const MainView = () => {
                 </Row>
               </>
             ) : (
-              <Row className="justify-content-md-center">
+              <Row className='justify-content-md-center'>
                 <Col md={6}>
                   {showLogin ? (
                     <>
                       <LoginView onLoggedIn={handleLogin} />
                       <p>or</p>
-                      <Button onClick={() => setShowLogin(false)}>Sign up</Button>
+                      <Button onClick={() => setShowLogin(false)}>
+                        Sign up
+                      </Button>
                     </>
                   ) : (
                     <>
@@ -171,27 +173,45 @@ export const MainView = () => {
             )
           }
         />
-        <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
-        <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
         <Route
-          path="/movies/:movieId"
+          path='/login'
           element={
-            <MovieView
-              movies={movies}
-              user={user}
-              onFavorite={handleFavorite}
-            />
+            user ? <Navigate to='/' /> : <LoginView onLoggedIn={handleLogin} />
           }
         />
         <Route
-          path="/profile"
+          path='/signup'
           element={
-            <ProfileView
-              user={user}
-              movies={movies}
-              onUserUpdate={handleUserUpdate}
-              onDeregister={handleDeregister}
-            />
+            user ? <Navigate to='/' /> : <SignupView onSignedUp={handleSignup} />
+          }
+        />
+        <Route
+          path='/movies/:movieId'
+          element={
+            user ? (
+              <MovieView
+                movies={movies}
+                user={user}
+                onFavorite={handleFavorite}
+              />
+            ) : (
+              <Navigate to='/login' replace />
+            )
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            user ? (
+              <ProfileView
+                user={user}
+                movies={movies}
+                onUserUpdate={handleUserUpdate}
+                onDeregister={handleDeregister}
+              />
+            ) : (
+              <Navigate to='/login' replace />
+            )
           }
         />
       </Routes>
