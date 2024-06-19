@@ -10,7 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -124,79 +124,77 @@ export const MainView = () => {
 
   return (
     <Container>
-      <Router>
-        <NavigationBar user={user} onLoggedOut={handleLogout} />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              user ? (
-                <>
-                  <h1>Movie List</h1>
-                  <Row>
-                    {movies.length === 0 ? (
-                      <Col>
-                        <div>The list is empty!</div>
+      <NavigationBar user={user} onLoggedOut={handleLogout} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            user ? (
+              <>
+                <h1>Movie List</h1>
+                <Row>
+                  {movies.length === 0 ? (
+                    <Col>
+                      <div>The list is empty!</div>
+                    </Col>
+                  ) : (
+                    movies.map((movie) => (
+                      <Col md={4} key={movie._id}>
+                        <MovieCard
+                          movie={movie}
+                          user={user}
+                          onFavorite={handleFavorite}
+                        />
                       </Col>
-                    ) : (
-                      movies.map((movie) => (
-                        <Col md={4} key={movie._id}>
-                          <MovieCard
-                            movie={movie}
-                            user={user}
-                            onFavorite={handleFavorite}
-                          />
-                        </Col>
-                      ))
-                    )}
-                  </Row>
-                </>
-              ) : (
-                <Row className="justify-content-md-center">
-                  <Col md={6}>
-                    {showLogin ? (
-                      <>
-                        <LoginView onLoggedIn={handleLogin} />
-                        <p>or</p>
-                        <Button onClick={() => setShowLogin(false)}>Sign up</Button>
-                      </>
-                    ) : (
-                      <>
-                        <SignupView onSignedUp={handleSignup} />
-                        <p>or</p>
-                        <Button onClick={() => setShowLogin(true)}>Log in</Button>
-                      </>
-                    )}
-                  </Col>
+                    ))
+                  )}
                 </Row>
-              )
-            }
-          />
-          <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
-          <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
-          <Route
-            path="/movies/:movieId"
-            element={
-              <MovieView
-                movies={movies}
-                user={user}
-                onFavorite={handleFavorite}
-              />
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProfileView
-                user={user}
-                movies={movies}
-                onUserUpdate={handleUserUpdate}
-                onDeregister={handleDeregister}
-              />
-            }
-          />
-        </Routes>
-      </Router>
+              </>
+            ) : (
+              <Row className="justify-content-md-center">
+                <Col md={6}>
+                  {showLogin ? (
+                    <>
+                      <LoginView onLoggedIn={handleLogin} />
+                      <p>or</p>
+                      <Button onClick={() => setShowLogin(false)}>Sign up</Button>
+                    </>
+                  ) : (
+                    <>
+                      <SignupView onSignedUp={handleSignup} />
+                      <p>or</p>
+                      <Button onClick={() => setShowLogin(true)}>Log in</Button>
+                    </>
+                  )}
+                </Col>
+              </Row>
+            )
+          }
+        />
+        <Route path="/login" element={<LoginView onLoggedIn={handleLogin} />} />
+        <Route path="/signup" element={<SignupView onSignedUp={handleSignup} />} />
+        <Route
+          path="/movies/:movieId"
+          element={
+            <MovieView
+              movies={movies}
+              user={user}
+              onFavorite={handleFavorite}
+            />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProfileView
+              user={user}
+              movies={movies}
+              onUserUpdate={handleUserUpdate}
+              onDeregister={handleDeregister}
+            />
+          }
+        />
+      </Routes>
     </Container>
   );
 };
