@@ -90,8 +90,8 @@ export const SignupView = ({ onSignedUp }) => {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">Signup</Button>
-              Submit
+            <Button variant="primary" type="submit">
+              Signup
             </Button>
           </Form>
         </Col>
