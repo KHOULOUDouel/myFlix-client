@@ -12,19 +12,33 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
+// MainView component
 export const MainView = () => {
+ Task-5
+  // Retrieve stored user and token from localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedToken = localStorage.getItem("token");
+
+  // State hooks
+
   const storedUser = JSON.parse(localStorage.getItem('user'));
   const storedToken = localStorage.getItem('token');
 
+ main
   const [movies, setMovies] = useState([]);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
 
+  // Fetch movies from API when token is available
   useEffect(() => {
     if (!token) return;
 
+ Task-5
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
+
     fetch('http://localhost:8080/movies/', {
+ main
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -35,12 +49,20 @@ export const MainView = () => {
           description: movie.Description,
           genre: {
             name: movie.Genre.Name,
+ Task-5
+            description: movie.Genre.Description
+
             description: movie.Genre.Description,
+ main
           },
           director: {
             name: movie.Director.Name,
             bio: movie.Director.Bio,
+ Task-5
+            birth: movie.Director.Birth
+
             birth: movie.Director.Birth,
+ main
           },
           imagePath: movie.ImagePath,
         }));
@@ -52,12 +74,43 @@ export const MainView = () => {
       });
   }, [token]);
 
+ Task-5
+  // Fetch movies from API without token (public access)
+  useEffect(() => {
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/")
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.docs.map((movie) => ({
+          id: movie.id,
+          title: movie.title,
+          poster: movie.poster,
+          director: movie.director,
+        }));
+
+        setMovies(moviesFromApi);
+      });
+  }, []);
+
+  // Handle movie click
+  const onMovieClick = (movie) => {
+    setSelectedMovie(movie);
+  };
+
+  // Handle back button click in MovieView
+  const onBackClick = () => {
+    setSelectedMovie(null);
+  };
+
+  // Handle logout
+
+ main
   const handleLogout = () => {
     setUser(null);
     setToken(null);
     localStorage.clear();
   };
 
+  // Handle login
   const handleLogin = (user, token) => {
     setUser(user);
     setToken(token);
@@ -65,9 +118,57 @@ export const MainView = () => {
     localStorage.setItem('token', token);
   };
 
+  // Handle signup
   const handleSignup = () => {
     setShowLogin(true);
   };
+
+ Task-5
+  // Render login/signup view if user is not logged in
+  if (!user) {
+    return (
+      <div>
+        {showLogin ? (
+          <>
+            <LoginView onLoggedIn={handleLogin} />
+            <p>or</p>
+            <button onClick={() => setShowLogin(false)}>Sign up</button>
+          </>
+        ) : (
+          <>
+            <SignupView onSignedUp={handleSignup} />
+            <p>or</p>
+            <button onClick={() => setShowLogin(true)}>Log in</button>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  // Render MovieView if a movie is selected
+  if (selectedMovie) {
+    return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
+  }
+
+  // Render movie list
+  return (
+    <div>
+      <h1>Movie List</h1>
+      <button onClick={handleLogout}>Logout</button>
+      <div>
+        {movies.length === 0 ? (
+          <div>The list is empty!</div>
+        ) : (
+          movies.map((movie) => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
+            />
+          ))
+        )}
+      </div>
+    </div>
 
   const handleUserUpdate = (updatedUser) => {
     fetch(`http://localhost:8080/users/${user.Username}`, {
@@ -216,6 +317,7 @@ export const MainView = () => {
         />
       </Routes>
     </Container>
+ main
   );
 };
 

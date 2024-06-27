@@ -21,7 +21,7 @@ export const LoginView = ({ onLoggedIn }) => {
     }
 
     // Perform authentication (mock example)
-    fetch("http://localhost:8080/login", {
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//login", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ Username: username, Password: password })

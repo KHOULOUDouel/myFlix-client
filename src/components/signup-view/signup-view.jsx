@@ -23,7 +23,11 @@ export const SignupView = ({ onSignedUp }) => {
       Birthday: birthday,
     };
 
+ Task-5
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//users", {
+
     fetch("http://localhost:8080/users", {
+main
       method: "POST",
       body: JSON.stringify(data),
       headers: {
