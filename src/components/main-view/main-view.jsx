@@ -34,10 +34,14 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
+ Task-6
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
+
  Task-5
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
 
     fetch('http://localhost:8080/movies/', {
+ main
  main
       headers: { Authorization: `Bearer ${token}` },
     })
