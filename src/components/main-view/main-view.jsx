@@ -32,6 +32,8 @@ export const MainView = () => {
 
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies/", {
 
+
+    
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -183,9 +185,9 @@ export const MainView = () => {
   // Handle favorite
   const handleFavorite = (movieId) => {
     const isFavorite = user.FavoriteMovies.includes(movieId);
-<
+
     const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}/movies/${movieId}`;
-=
+
     const method = isFavorite ? 'DELETE' : 'POST';
 
     fetch(url, {
