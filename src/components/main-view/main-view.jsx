@@ -15,7 +15,7 @@ export const MainView = () => {
         const moviesFromApi = data.docs.map((movie) => {
           return {
             id: movie.id,
-            
+            title: movie.title,
             poster: movie.poster, // Assuming your API provides a poster URL
             director: movie.director,
           };
