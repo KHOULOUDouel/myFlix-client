@@ -32,8 +32,6 @@ export const MainView = () => {
 
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies/", {
 
-
-    
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
