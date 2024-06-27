@@ -1,22 +1,22 @@
 // Import the createRoot function from the 'react-dom/client' package
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 
 // Import the MainView component from the specified path
-import { MainView } from './components/main-view/main-view.jsx';
-
-// Import Container from React Bootstrap
-import Container from 'react-bootstrap/Container';
+import { MainView } from './components/main-view/main-view';
 
 // Import statement to include the styles from `./index.scss`
 import "./index.scss";
 
-
 // Define the main App component, which will eventually include all other components
 const App = () => {
   return (
-    <Container>
-      <MainView />
-    </Container>
+    <Router>
+      <Container>
+        <MainView />
+      </Container>
+    </Router>
   );
 };
 
