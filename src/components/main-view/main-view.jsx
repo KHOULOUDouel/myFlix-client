@@ -14,39 +14,22 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 // MainView component
 export const MainView = () => {
- Task-5
   // Retrieve stored user and token from localStorage
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
   // State hooks
-
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-  const storedToken = localStorage.getItem('token');
-
- main
   const [movies, setMovies] = useState([]);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   // Fetch movies from API when token is available
   useEffect(() => {
     if (!token) return;
 
- Task-7
-    fetch('https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/', {
-
- Task-6
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
-
- Task-5
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
-
-    fetch('http://localhost:8080/movies/', {
- main
- main
- main
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies/", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -57,20 +40,12 @@ export const MainView = () => {
           description: movie.Description,
           genre: {
             name: movie.Genre.Name,
- Task-5
             description: movie.Genre.Description
-
-            description: movie.Genre.Description,
- main
           },
           director: {
             name: movie.Director.Name,
             bio: movie.Director.Bio,
- Task-5
             birth: movie.Director.Birth
-
-            birth: movie.Director.Birth,
- main
           },
           imagePath: movie.ImagePath,
         }));
@@ -82,17 +57,25 @@ export const MainView = () => {
       });
   }, [token]);
 
- Task-5
   // Fetch movies from API without token (public access)
   useEffect(() => {
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/")
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies/")
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.docs.map((movie) => ({
-          id: movie.id,
-          title: movie.title,
-          poster: movie.poster,
-          director: movie.director,
+        const moviesFromApi = data.map((movie) => ({
+          _id: movie._id,
+          title: movie.Title,
+          description: movie.Description,
+          genre: {
+            name: movie.Genre.Name,
+            description: movie.Genre.Description
+          },
+          director: {
+            name: movie.Director.Name,
+            bio: movie.Director.Bio,
+            birth: movie.Director.Birth
+          },
+          imagePath: movie.ImagePath,
         }));
 
         setMovies(moviesFromApi);
@@ -110,8 +93,6 @@ export const MainView = () => {
   };
 
   // Handle logout
-
- main
   const handleLogout = () => {
     setUser(null);
     setToken(null);
@@ -131,7 +112,6 @@ export const MainView = () => {
     setShowLogin(true);
   };
 
- Task-5
   // Render login/signup view if user is not logged in
   if (!user) {
     return (
@@ -158,28 +138,9 @@ export const MainView = () => {
     return <MovieView movie={selectedMovie} onBackClick={onBackClick} />;
   }
 
-  // Render movie list
-  return (
-    <div>
-      <h1>Movie List</h1>
-      <button onClick={handleLogout}>Logout</button>
-      <div>
-        {movies.length === 0 ? (
-          <div>The list is empty!</div>
-        ) : (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
-              onMovieClick={(newSelectedMovie) => setSelectedMovie(newSelectedMovie)}
-            />
-          ))
-        )}
-      </div>
-    </div>
-
+  // Handle user update
   const handleUserUpdate = (updatedUser) => {
-    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${user.Username}`, {
+    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}`, {
       method: 'PUT',
       body: JSON.stringify(updatedUser),
       headers: {
@@ -197,8 +158,9 @@ export const MainView = () => {
       });
   };
 
+  // Handle deregister
   const handleDeregister = (username) => {
-    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${username}`, {
+    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${username}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -212,9 +174,10 @@ export const MainView = () => {
       });
   };
 
+  // Handle favorite
   const handleFavorite = (movieId) => {
     const isFavorite = user.FavoriteMovies.includes(movieId);
-    const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${user.Username}/movies/${movieId}`;
+    const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}/movies/${movieId}`;
     const method = isFavorite ? 'DELETE' : 'POST';
 
     fetch(url, {
@@ -231,6 +194,7 @@ export const MainView = () => {
       });
   };
 
+  // Render movie list
   return (
     <Container>
       <NavigationBar user={user} onLoggedOut={handleLogout} />
@@ -253,6 +217,7 @@ export const MainView = () => {
                           movie={movie}
                           user={user}
                           onFavorite={handleFavorite}
+                          onMovieClick={onMovieClick}
                         />
                       </Col>
                     ))
@@ -266,9 +231,7 @@ export const MainView = () => {
                     <>
                       <LoginView onLoggedIn={handleLogin} />
                       <p>or</p>
-                      <Button onClick={() => setShowLogin(false)}>
-                        Sign up
-                      </Button>
+                      <Button onClick={() => setShowLogin(false)}>Sign up</Button>
                     </>
                   ) : (
                     <>
@@ -325,7 +288,6 @@ export const MainView = () => {
         />
       </Routes>
     </Container>
- main
   );
 };
 
