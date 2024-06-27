@@ -22,7 +22,7 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:8080/movies/", {
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -52,7 +52,7 @@ export const MainView = () => {
 
   // Fetch movies from API without token (public access)
   useEffect(() => {
-    fetch("http://localhost:8080/movies/")
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/")
       .then((response) => response.json())
       .then((data) => {
         const moviesFromApi = data.docs.map((movie) => ({
