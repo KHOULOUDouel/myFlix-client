@@ -1,5 +1,8 @@
-$color: steelblue;
+// index.scss
 
-.my-flix {
-  color: $color;
-}
+// Custom Bootstrap variables
+$primary: SeaGreen;
+$body-bg: Honeydew;
+
+// Import Bootstrap's Sass file
+@import '~bootstrap/scss/bootstrap.scss';
