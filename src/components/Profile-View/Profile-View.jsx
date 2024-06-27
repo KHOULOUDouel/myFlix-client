@@ -22,7 +22,7 @@ export const ProfileView = ({ user, movies, onUserUpdate, onDeregister }) => {
     onUserUpdate(updatedUser);
   };
 
-  const handleDeregister = () => {
+  const handleDeregisterClick = () => {
     onDeregister(user.Username);
   };
 
@@ -72,11 +72,11 @@ export const ProfileView = ({ user, movies, onUserUpdate, onDeregister }) => {
                     required
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" className="mt-3">
                   Update
                 </Button>
               </Form>
-              <Button variant="danger" onClick={handleDeregister} className="mt-3">
+              <Button variant="danger" onClick={handleDeregisterClick} className="mt-3">
                 Deregister
               </Button>
             </Card.Body>
