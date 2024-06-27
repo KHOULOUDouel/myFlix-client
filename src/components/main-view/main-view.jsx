@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 export const MainView = () => {
@@ -20,11 +21,12 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     if (!token) return;
 
-    fetch('https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/', {
+    fetch('https://khouloud-movies-c211078f4ca4.herokuapp.com/movies/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -70,7 +72,7 @@ export const MainView = () => {
   };
 
   const handleUserUpdate = (updatedUser) => {
-    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${user.Username}`, {
+    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}`, {
       method: 'PUT',
       body: JSON.stringify(updatedUser),
       headers: {
@@ -89,7 +91,7 @@ export const MainView = () => {
   };
 
   const handleDeregister = (username) => {
-    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${username}`, {
+    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${username}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -105,7 +107,7 @@ export const MainView = () => {
 
   const handleFavorite = (movieId) => {
     const isFavorite = user.FavoriteMovies.includes(movieId);
-    const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${user.Username}/movies/${movieId}`;
+    const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}/movies/${movieId}`;
     const method = isFavorite ? 'DELETE' : 'POST';
 
     fetch(url, {
@@ -122,6 +124,10 @@ export const MainView = () => {
       });
   };
 
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <Container>
       <NavigationBar user={user} onLoggedOut={handleLogout} />
@@ -132,13 +138,20 @@ export const MainView = () => {
             user ? (
               <>
                 <h1>Movie List</h1>
+                <Form.Control
+                  type="text"
+                  placeholder="Filter movies by title"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="mb-3"
+                />
                 <Row>
-                  {movies.length === 0 ? (
+                  {filteredMovies.length === 0 ? (
                     <Col>
                       <div>The list is empty!</div>
                     </Col>
                   ) : (
-                    movies.map((movie) => (
+                    filteredMovies.map((movie) => (
                       <Col md={4} key={movie._id}>
                         <MovieCard
                           movie={movie}
