@@ -34,6 +34,9 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
+ Task-7
+    fetch('https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/', {
+
  Task-6
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
 
@@ -41,6 +44,7 @@ export const MainView = () => {
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//movies/", {
 
     fetch('http://localhost:8080/movies/', {
+ main
  main
  main
       headers: { Authorization: `Bearer ${token}` },
@@ -175,7 +179,7 @@ export const MainView = () => {
     </div>
 
   const handleUserUpdate = (updatedUser) => {
-    fetch(`http://localhost:8080/users/${user.Username}`, {
+    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${user.Username}`, {
       method: 'PUT',
       body: JSON.stringify(updatedUser),
       headers: {
@@ -194,7 +198,7 @@ export const MainView = () => {
   };
 
   const handleDeregister = (username) => {
-    fetch(`http://localhost:8080/users/${username}`, {
+    fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${username}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -210,7 +214,7 @@ export const MainView = () => {
 
   const handleFavorite = (movieId) => {
     const isFavorite = user.FavoriteMovies.includes(movieId);
-    const url = `http://localhost:8080/users/${user.Username}/movies/${movieId}`;
+    const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com//users/${user.Username}/movies/${movieId}`;
     const method = isFavorite ? 'DELETE' : 'POST';
 
     fetch(url, {
