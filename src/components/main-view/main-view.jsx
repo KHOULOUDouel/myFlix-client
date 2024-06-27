@@ -29,7 +29,11 @@ export const MainView = () => {
   useEffect(() => {
     if (!token) return;
 
+
     fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/movies/", {
+
+
+    
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -140,7 +144,9 @@ export const MainView = () => {
 
   // Handle user update
   const handleUserUpdate = (updatedUser) => {
+
     fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}`, {
+
       method: 'PUT',
       body: JSON.stringify(updatedUser),
       headers: {
@@ -160,7 +166,9 @@ export const MainView = () => {
 
   // Handle deregister
   const handleDeregister = (username) => {
+
     fetch(`https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${username}`, {
+
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -177,7 +185,9 @@ export const MainView = () => {
   // Handle favorite
   const handleFavorite = (movieId) => {
     const isFavorite = user.FavoriteMovies.includes(movieId);
+
     const url = `https://khouloud-movies-c211078f4ca4.herokuapp.com/users/${user.Username}/movies/${movieId}`;
+
     const method = isFavorite ? 'DELETE' : 'POST';
 
     fetch(url, {
