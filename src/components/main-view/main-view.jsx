@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -22,6 +23,8 @@ export const MainView = () => {
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedDirector, setSelectedDirector] = useState('');
 
   useEffect(() => {
     if (!token) return;
@@ -124,9 +127,13 @@ export const MainView = () => {
       });
   };
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMovies = movies.filter((movie) => {
+    return (
+      movie.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedGenre ? movie.genre.name === selectedGenre : true) &&
+      (selectedDirector ? movie.director.name === selectedDirector : true)
+    );
+  });
 
   return (
     <Container>
@@ -139,6 +146,38 @@ export const MainView = () => {
               <>
                 <h1>Movie List</h1>
                 <SearchBar value={searchTerm} onChange={setSearchTerm} />
+                <Form>
+                  <Form.Group controlId="formGenre">
+                    <Form.Label>Filter by Genre</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={selectedGenre}
+                      onChange={(e) => setSelectedGenre(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      {Array.from(new Set(movies.map((movie) => movie.genre.name))).map((genre) => (
+                        <option key={genre} value={genre}>
+                          {genre}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                  <Form.Group controlId="formDirector">
+                    <Form.Label>Filter by Director</Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={selectedDirector}
+                      onChange={(e) => setSelectedDirector(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      {Array.from(new Set(movies.map((movie) => movie.director.name))).map((director) => (
+                        <option key={director} value={director}>
+                          {director}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
+                </Form>
                 <Row>
                   {filteredMovies.length === 0 ? (
                     <Col>
