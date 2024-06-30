@@ -6,13 +6,13 @@ import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 import { ProfileView } from '../profile-view/profile-view';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
-import { SearchBar } from '../search-bar/search-bar';
+import { SearchBar } from '../searchbar-view/searchbar-view'; // Corrected import path
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { Routes, Route, Navigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));

@@ -21,22 +21,27 @@ export const LoginView = ({ onLoggedIn }) => {
     }
 
     // Perform authentication (mock example)
-    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com//login", {
+    fetch("https://khouloud-movies-c211078f4ca4.herokuapp.com/login", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ Username: username, Password: password })
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to login');
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("token", data.token);
           onLoggedIn(data.user, data.token);
         } else {
-          setError("No such user");
+          setError("Invalid username or password.");
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setError('Something went wrong. Please try again.');
       });
   };
