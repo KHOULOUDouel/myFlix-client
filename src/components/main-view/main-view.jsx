@@ -6,11 +6,11 @@ import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 import { ProfileView } from '../profile-view/profile-view';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
+import { SearchBar } from '../search-bar/search-bar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 export const MainView = () => {
@@ -21,7 +21,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [showLogin, setShowLogin] = useState(true);
-  const [filter, setFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (!token) return;
@@ -125,7 +125,7 @@ export const MainView = () => {
   };
 
   const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(filter.toLowerCase())
+    movie.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -138,13 +138,7 @@ export const MainView = () => {
             user ? (
               <>
                 <h1>Movie List</h1>
-                <Form.Control
-                  type="text"
-                  placeholder="Filter movies by title"
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="mb-3"
-                />
+                <SearchBar value={searchTerm} onChange={setSearchTerm} />
                 <Row>
                   {filteredMovies.length === 0 ? (
                     <Col>
