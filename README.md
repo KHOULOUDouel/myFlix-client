@@ -1,8 +1,8 @@
-# myFlix React App
+# myFlix-client
 
 ## Objective
 
-The myFlix React app is the client-side for an app called myFlix, which is based on existing server-side code (REST API and database). The main goal is to create a single-page, responsive app with routing, rich interactions, several interface views, and a polished user experience.
+The myFlix-client is the client-side for an app called myFlix, which is based on existing server-side code (REST API and database). The main goal is to create a single-page, responsive app with routing, rich interactions, several interface views, and a polished user experience.
 
 ## Context
 
@@ -49,7 +49,7 @@ Client-side development has become increasingly prominent with the advent of mod
 ## Installation and Usage
 
 1. Clone the repository: `git clone https://github.com/KHOULOUDouel/myFlix-client.git`
-2. Navigate to the project directory: `cd myflix-react`
+2. Navigate to the project directory: `cd myflix-client`
 3. Install dependencies: `npm install`
 4. Start the development server: `npm start` (The server runs by default on port 8080)
 
