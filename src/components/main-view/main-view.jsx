@@ -7,7 +7,7 @@ import { SignupView } from '../signup-view/signup-view';
 import { ProfileView } from '../Profile-View/Profile-View';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
 import { SearchBar } from '../searchbar-view/searchbar-view';
-import { FilterView } from '../filter-view/filter-view';
+import { FilterView } from '../Filter-View/Filter-View';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

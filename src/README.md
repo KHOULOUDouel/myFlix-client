@@ -1,60 +1,42 @@
-# myFlix
+# myFlix App
 
-myFlix is a movie information application built using React, React-Bootstrap, and React Router. Users can browse movies, view details about them, sign up, log in, and manage their profile, including adding and removing favorite movies.
+The myFlix app is a comprehensive movie database that allows users to explore various movies, genres, and directors. Users can also register for an account to add their favorite movies to their personal list.
 
-## Table of Contents
+## Usage
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Deployment](#deployment)
-- [Built With](#built-with)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+Users can perform the following actions:
 
-## Features
+- View a list of all movies available in the database.
+- Get detailed information about a specific movie, including description, genre, director, and image URL.
+- Search and filter movies by keywords or genres.
+- Register for a new user account.
+- Update their account information such as username, password, and email.
+- Add movies to their list of favorites.
+- Remove movies from their list of favorites.
+- Deregister their account.
 
-- User authentication (sign up, log in, log out)
-- Browse a list of movies
-- View detailed information about each movie
-- Add or remove movies from favorites
-- View and update user profile information
-- Responsive design using React-Bootstrap
-- Client-side routing with React Router
+For more detailed information and example data, visit the [myFlix Documentation](https://khouloud-movies-c211078f4ca4.herokuapp.com/documentation.html).
 
-## Installation
+## Technologies Used
 
-### Prerequisites
+### API:
+- NodeJS
+- Express
+- MongoDB
+- Heroku
 
-- Node.js (v14.x or later)
-- npm (v6.x or later)
+### Client Side:
+- React
+- React Bootstrap
+- Netlify
+- Parcel
 
-### Getting Started
+## Developed Skills
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/KHOULOUDouel/myFlix-client.git
-    cd myFlix-client
-    ```
+Developing this project provided insights into server-side development using NodeJS and Express. It also involved working with MongoDB for data storage and managing deployments on Heroku. On the client side, React and React Bootstrap were used for building a dynamic user interface, with Netlify handling the deployment.
 
-2. Install dependencies:
-    ```sh
-    npm install
-    ```
+## Project URL
 
-3. Create a `netlify.toml` file in the root of the project with the following content:
-    ```toml
-    [[redirects]]
-      from = "/*"
-      to = "/"
-      status = 200
-    ```
-
-4. Start the development server:
-    ```sh
-    npm start
-    ```
-
-5. Open your browser and navigate to `http://localhost:1234`.
-
+- [Github API](https://github.com/KHOULOUDouel/myFlix)
+- [Github Client Side](https://github.com/KHOULOUDouel/myFlix-client)
+- [Heroku App](https://khouloud-movies-c211078f4ca4.herokuapp.com/)
