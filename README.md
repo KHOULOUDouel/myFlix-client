@@ -1,43 +1,69 @@
-# myFlix App
+# myFlix React App
 
-The myFlix app is a comprehensive movie database that allows users to explore various movies, genres, and directors. Users can also register for an account to add their favorite movies to their personal list.
+## Objective
 
-## Usage
+The myFlix React app is the client-side for an app called myFlix, which is based on existing server-side code (REST API and database). The main goal is to create a single-page, responsive app with routing, rich interactions, several interface views, and a polished user experience.
 
-Users can perform the following actions:
+## Context
 
-- View a list of all movies available in the database.
-- Get detailed information about a specific movie, including description, genre, director, and image URL.
-- Search and filter movies by keywords or genres.
-- Register for a new user account.
-- Update their account information such as username, password, and email.
-- Add movies to their list of favorites.
-- Remove movies from their list of favorites.
-- Deregister their account.
+Client-side development has become increasingly prominent with the advent of modern browsers and libraries such as React. The myFlix app aims to provide movie enthusiasts with access to information about different movies, allowing them to save data about their favorite movies.
 
-For more detailed information and example data, visit the [myFlix Documentation](https://khouloud-movies-c211078f4ca4.herokuapp.com/documentation.html).
+## Technologies
 
-## Technologies Used
-
-### API:
-- NodeJS
-- Express
-- MongoDB
-- Heroku
-
-### Client Side:
 - React
-- React Bootstrap
-- Netlify
+- ES2015+
+- Bootstrap
 - Parcel
 
-## Developed Skills
+## Features
 
-Developing this project provided insights into server-side development using NodeJS and Express. It also involved working with MongoDB for data storage and managing deployments on Heroku. On the client side, React and React Bootstrap were used for building a dynamic user interface, with Netlify handling the deployment.
+### Main View
+
+- Returns ALL movies to the user (each movie item with an image, title, and description)
+- Filtering the list of movies with a “search” feature
+- Ability to select a movie for more details
+- Ability to log out
+- Ability to navigate to Profile view
+
+### Single Movie View
+
+- Returns data (description, genre, director, image) about a single movie to the user
+- Allows users to add a movie to their list of favorites
+
+### Login View
+
+- Allows users to log in with a username and password
+
+### Signup View
+
+- Allows new users to register (username, password, email, date of birth)
+
+### Profile View
+
+- Displays user registration details
+- Allows users to update their info (username, password, email, date of birth)
+- Displays favorite movies
+- Allows users to remove a movie from their list of favorites
+- Allows existing users to deregister
+
+## Installation and Usage
+
+1. Clone the repository: `git clone https://github.com/KHOULOUDouel/myFlix-client.git`
+2. Navigate to the project directory: `cd myflix-react`
+3. Install dependencies: `npm install`
+4. Start the development server: `npm start` (The server runs by default on port 8080)
+
+## Contributing
+
+Please read the contribution guidelines before contributing.
+
+## License
+
+This project is licensed under the MIT License.
 
 ## Project URL
 
-- [Github API](https://github.com/KHOULOUDouel/myFlix)
+- [myFlix](https://app-flix.netlify.app/)
 - [Github Client Side](https://github.com/KHOULOUDouel/myFlix-client)
-- [Heroku App](https://khouloud-movies-c211078f4ca4.herokuapp.com/)
+
 
