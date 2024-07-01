@@ -6,7 +6,8 @@ import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
 import { ProfileView } from '../profile-view/profile-view';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
-import { SearchBar } from '../searchbar-view/searchbar-view'; // Corrected import path
+import { SearchBar } from '../searchbar-view/searchbar-view';
+import { FilterView } from '../filter-view/filter-view';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -25,6 +26,7 @@ export const MainView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedDirector, setSelectedDirector] = useState('');
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     if (!token) return;
@@ -127,11 +129,13 @@ export const MainView = () => {
       });
   };
 
+  // Filter movies based on the selected genre, director, and search term
   const filteredMovies = movies.filter((movie) => {
     return (
       movie.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedGenre ? movie.genre.name === selectedGenre : true) &&
-      (selectedDirector ? movie.director.name === selectedDirector : true)
+      (selectedDirector ? movie.director.name === selectedDirector : true) &&
+      movie.title.toLowerCase().includes(filter.toLowerCase())
     );
   });
 
@@ -146,6 +150,7 @@ export const MainView = () => {
               <>
                 <h1>Movie List</h1>
                 <SearchBar value={searchTerm} onChange={setSearchTerm} />
+                <FilterView onFilter={setFilter} />
                 <Form>
                   <Form.Group controlId="formGenre">
                     <Form.Label>Filter by Genre</Form.Label>
